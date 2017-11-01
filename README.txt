@@ -33,3 +33,9 @@ que estas devem implementar (movimentar-se);
 
     - Classe JOGADOR: define um jogador, de modo a tratar cada um de maneira independente dentro do jogo, tendo cada um sua pontuação tratada
 individualmente, e sendo reconhecido de maneira singular dentro da partida.  
+
+ * INTERFACE GRAFICA
+    - TELA INICIAL: tela que trará uma breve explicação de como jogar, e uma área de preparação para o jogo, na qual se identificará quem são os jogadores;
+        
+    - TELA JOGO: tela que traz o jogo em si com o tabuleiro e a pontuação dos jogadores ao longo da partida.
+    
