@@ -24,7 +24,7 @@
 	    <artifactId>exec-maven-plugin</artifactId>
 	    <version>1.2.1</version>
 	    <configuration>
-	      <mainClass>ine5404.Controller</mainClass>
+	      <mainClass>control.Inicializador</mainClass>
 	    </configuration>
 	  </plugin>
              <plugin>
