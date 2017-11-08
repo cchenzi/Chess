@@ -5,6 +5,8 @@
  */
 package model;
 
+import Exceptions.JogadaInvalidaException;
+
 /**
  *
  * @author felip
@@ -22,6 +24,6 @@ public abstract class Peca {
         return valor;
     }
 
-    public abstract void movimentar();
+    public abstract void movimentar(int[] posInicial, int[] posFinal) throws JogadaInvalidaException;
 
 }

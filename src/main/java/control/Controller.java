@@ -18,9 +18,11 @@ public class Controller {
         return jogo;
     }
     
-    public void iniciarNovoXadrez(Jogador[] jogadores) {
-        jogo = new Xadrez(jogadores);
+    public void iniciarNovoXadrez(Jogador[] jogadores) {   
+        jogo = new Xadrez(jogadores, null);
         TelaJogo telaJogo = new TelaJogo(this);
+        ((Xadrez)jogo).setObserver(telaJogo);
+        jogo.jogar();
     }
     
 }

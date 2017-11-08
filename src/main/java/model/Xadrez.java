@@ -5,22 +5,43 @@
  */
 package model;
 
+import Exceptions.JogadaInvalidaException;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  *
  * @author felip
  */
 public class Xadrez extends Jogo {
     
+    private Map<String, Peca> mapaPecaId = new HashMap<>();
+    private PecasEnum[][] tabuleiro;
+    private Observer observer;
+  
     public enum PecasEnum {
         PEAO_PRETO, PEAO_BRANCO, BISPO_PRETO, BISPO_BRANCO, CAVALO_PRETO, CAVALO_BRANCO, RAINHA_PRETO, RAINHA_BRANCO, REI_PRETO,
         REI_BRANCO, TORRE_PRETO, TORRE_BRANCO;
     }
     
-    PecasEnum[][] tabuleiro;
+    private void inicializarMapaPecaId() {
+        mapaPecaId.put("PEAO", new Peao());
+        mapaPecaId.put("TORRE", new Torre());
+        mapaPecaId.put("CAVALO", new Cavalo());
+        mapaPecaId.put("BISPO", new Bispo());
+        mapaPecaId.put("RAINHA", new Rainha());
+        mapaPecaId.put("REI", new Rei());
+    }
 
-    public Xadrez(Jogador[] jogadores) {
+    public Xadrez(Jogador[] jogadores, Observer observer) {
         super(jogadores);
+        inicializarMapaPecaId();
         inicializarTabuleiro();
+        this.observer = observer;
+    }
+    
+    public void setObserver(Observer observer) {
+        this.observer = observer;
     }
     
     public PecasEnum[][] getTabuleiro() {
@@ -59,6 +80,25 @@ public class Xadrez extends Jogo {
                     tabuleiro[i+5][j] = PecasEnum.PEAO_BRANCO;
                 }
             }
+        }
+    }
+    
+    @Override
+    protected void realizarJogada(Jogador jogador) {
+        observer.requisitarJogada(jogador);
+    }
+
+    @Override
+    protected boolean fimJogo() {
+        return false;
+    }
+    
+    public void movimentarPeca(Jogador jogador, int[] posInicial, int[] posFinal) {
+        try {
+            Peca peca = mapaPecaId.get(tabuleiro[posInicial[0]][posInicial[1]].toString().split("_")[0]);
+            peca.movimentar(posInicial, posFinal);
+        } catch (JogadaInvalidaException e) {
+            realizarJogada(jogador);
         }
     }
     

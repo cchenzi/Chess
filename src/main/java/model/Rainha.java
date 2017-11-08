@@ -5,6 +5,8 @@
  */
 package model;
 
+import Exceptions.JogadaInvalidaException;
+
 /**
  *
  * @author felip
@@ -16,7 +18,7 @@ public class Rainha extends Peca {
     }
 
     @Override
-    public void movimentar() {
+    public void movimentar(int[] posInicial, int[] posFinal) throws JogadaInvalidaException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

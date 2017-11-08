@@ -17,8 +17,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.HashMap;
-import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -27,13 +25,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JToggleButton;
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
-import model.Bispo;
-import model.Cavalo;
-import model.Peao;
-import model.Peca;
-import model.Rainha;
-import model.Rei;
-import model.Torre;
+import model.Jogador;
+import model.Observer;
 import model.Xadrez;
 import model.Xadrez.PecasEnum;
 
@@ -41,11 +34,12 @@ import model.Xadrez.PecasEnum;
  *
  * @author felip
  */
-public class TelaJogo extends javax.swing.JFrame {
+public class TelaJogo extends javax.swing.JFrame implements Observer {
 
-    Controller controller;
-    JToggleButton[][] matrizBotoes;
-    Map<String, Peca> mapaPecaId = new HashMap<>();
+    private Controller controller;
+    private JToggleButton[][] matrizBotoes;
+    
+    private JToggleButton pecaSelecionadaInicio, destinoPecaSelecionada;
 
     // Containers
     private JFrame window;
@@ -58,17 +52,7 @@ public class TelaJogo extends javax.swing.JFrame {
     public TelaJogo(Controller controller) {
         this.controller = controller;
         matrizBotoes = new JToggleButton[8][8];
-        inicializarMapaPecaId();
         inicializarUI();
-    }
-
-    private void inicializarMapaPecaId() {
-        mapaPecaId.put("PEAO", new Peao());
-        mapaPecaId.put("TORRE", new Torre());
-        mapaPecaId.put("CAVALO", new Cavalo());
-        mapaPecaId.put("BISPO", new Bispo());
-        mapaPecaId.put("RAINHA", new Rainha());
-        mapaPecaId.put("REI", new Rei());
     }
 
     private void inicializarUI() {
@@ -193,7 +177,7 @@ public class TelaJogo extends javax.swing.JFrame {
             for (int j = 0; j < 8; j++) {
                 if (matriz[i][j] != null) {
                     String nomeArquivo = matriz[i][j].toString().toLowerCase() + ".png";
-                    matrizBotoes[i][j].setIcon(new ImageIcon(System.getProperty("user.dir") + "\\src\\main\\java\\img\\" + nomeArquivo));  // FAZER DINAMICAMENTE
+                    matrizBotoes[i][j].setIcon(new ImageIcon(System.getProperty("user.dir") + "/src/main/java/img/" + nomeArquivo));  // FAZER DINAMICAMENTE
                 }
             }
         }
@@ -207,10 +191,14 @@ public class TelaJogo extends javax.swing.JFrame {
         if (cor == 1) {
             button.setBackground(new Color(255, 255, 240)); // COR = MARFIM
         } else {
-            button.setBackground(Color.black);
+            button.setBackground(new Color(205, 133, 63));
         }
         button.addActionListener((ActionEvent e) -> {
-            // IMPLEMENTAR
+            if (pecaSelecionadaInicio == null) {
+                pecaSelecionadaInicio = (JToggleButton)e.getSource();
+            } else {
+               destinoPecaSelecionada = (JToggleButton)e.getSource();
+            }
         });
 
         return button;
@@ -219,6 +207,16 @@ public class TelaJogo extends javax.swing.JFrame {
     private void atualizarLabelsPontuacao() {
         pontuacaoP1.setText("" + controller.getJogo().getJogadores()[0].getPontuacao());
         pontuacaoP2.setText("" + controller.getJogo().getJogadores()[1].getPontuacao());
+    }
+
+    @Override
+    public void requisitarJogada(Jogador jogador) {
+        while (pecaSelecionadaInicio == null) {}
+        while (destinoPecaSelecionada == null){}
+        ((Xadrez)controller.getJogo()).movimentarPeca(jogador, getButtonPosition(pecaSelecionadaInicio), getButtonPosition(destinoPecaSelecionada));
+        
+        pecaSelecionadaInicio = null;
+        destinoPecaSelecionada = null;
     }
 
 }

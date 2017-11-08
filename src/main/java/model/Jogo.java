@@ -22,5 +22,16 @@ public abstract class Jogo {
     }
     
     // IMPLEMENTAR PADRÃO TEMPLATE METHOD
+    public void jogar() {
+        int i = 0;
+        while (!fimJogo()) {
+            realizarJogada(jogadores[i % jogadores.length]);
+            i++;
+        }
+    }
+    
+    protected abstract void realizarJogada(Jogador jogador); 
+    
+    protected abstract boolean fimJogo();
     
 }
