@@ -17,6 +17,10 @@ public abstract class Jogo {
         this.jogadores = jogadores;
     }
     
+    public Jogador[] getJogadores() {
+        return jogadores;
+    }
+    
     // IMPLEMENTAR PADRÃO TEMPLATE METHOD
     
 }
