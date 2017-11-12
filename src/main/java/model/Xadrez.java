@@ -6,6 +6,7 @@
 package model;
 
 import Exceptions.JogadaInvalidaException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,6 +53,7 @@ public class Xadrez extends Jogo {
             jogadorVez = 0;
         }
     }
+    
 
     private void inicializarTabuleiro() {
         tabuleiro = new PecasEnum[8][8];
@@ -93,25 +95,39 @@ public class Xadrez extends Jogo {
 
     @Override
     public void fazerJogada(int[] posInicial, int[] posDestino) throws JogadaInvalidaException {
+       
         Peca peca = mapaPecaId.get(tabuleiro[posInicial[0]][posInicial[1]].toString().split("_")[0]);
-      
+       
+        
  
         if(peca.getValor()==1 && tabuleiro[posDestino[0]][posDestino[1]] != null){
             if(posDestino[1] == posInicial[1]+1 || posDestino[1] == posInicial[1]-1){
-            tabuleiro[posDestino[0]][posDestino[1]] = tabuleiro[posInicial[0]][posInicial[1]];
-            tabuleiro[posInicial[0]][posInicial[1]] = null; 
-                //TESTE PARA PROMOÇÃO
+                Peca pecaAux = mapaPecaId.get(tabuleiro[posDestino[0]][posDestino[1]].toString().split("_")[0]);
+                tabuleiro[posDestino[0]][posDestino[1]] = tabuleiro[posInicial[0]][posInicial[1]];
+                tabuleiro[posInicial[0]][posInicial[1]] = null; 
+                jogadores[jogadorVez].setPontuacao( jogadores[jogadorVez].getPontuacao()+pecaAux.getValor());
+            //TESTE PARA PROMOÇÃO
                 if(peca.getValor()==1){
                      if(posDestino[0] == 0 || posDestino[0] == 7){
+                     if(tabuleiro[posInicial[0]][posInicial[1]] == PecasEnum.PEAO_BRANCO){
+                        tabuleiro[posDestino[0]][posDestino[1]] = PecasEnum.RAINHA_BRANCO;  
+                     }else{
+                        tabuleiro[posDestino[0]][posDestino[1]] = PecasEnum.RAINHA_PRETO; 
+                     }
                      //FAZER UM TESTE DECENTE PARA VER SE É BRANCO OU PRETO, PENSAR SE IMPLEMENTA ESCOLHA OU SÓ RAINHA
-                     tabuleiro[posDestino[0]][posDestino[1]] = PecasEnum.RAINHA_BRANCO; 
+                     
             }
         }
             }
         }
         else if (peca.isJogadaValida(posInicial, posDestino)) {
+            if(tabuleiro[posDestino[0]][posDestino[1]] != null){
+                Peca pecaAux = mapaPecaId.get(tabuleiro[posDestino[0]][posDestino[1]].toString().split("_")[0]);
+                jogadores[jogadorVez].setPontuacao( jogadores[jogadorVez].getPontuacao()+pecaAux.getValor());
+            }
             tabuleiro[posDestino[0]][posDestino[1]] = tabuleiro[posInicial[0]][posInicial[1]];
             tabuleiro[posInicial[0]][posInicial[1]] = null;
+           
         } else {
             throw new JogadaInvalidaException();
         } 
@@ -139,7 +155,10 @@ public class Xadrez extends Jogo {
 
     @Override
     public void preparaProximaJogada() {
+        
         trocarJogadorVez();
     }
+    
+   
 
 }

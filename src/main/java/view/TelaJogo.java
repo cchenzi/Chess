@@ -252,10 +252,13 @@ public class TelaJogo extends javax.swing.JFrame {
     }
 
     private void atualizarLabels() {
+      
         jogadorVez.setText("Vez de: " + controller.getJogo().getJogadores()[controller.getJogo().getJogadorVez()].getNome());
         pontuacaoP1.setText("" + controller.getJogo().getJogadores()[0].getPontuacao());
         pontuacaoP2.setText("" + controller.getJogo().getJogadores()[1].getPontuacao());
     }
+    
+    
 
     private void anunciarVencedor() {
         JOptionPane.showMessageDialog(null, "XEQUE-MATE!!");
