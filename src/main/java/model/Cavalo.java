@@ -5,8 +5,6 @@
  */
 package model;
 
-import Exceptions.JogadaInvalidaException;
-
 /**
  *
  * @author felip
@@ -14,12 +12,13 @@ import Exceptions.JogadaInvalidaException;
 public class Cavalo extends Peca {
 
     public Cavalo() {
-        super(0);   // DEFINIR VALOR CORRETO
+        super(3); 
     }
 
     @Override
-    public void movimentar(int[] posInicial, int[] posFinal) throws JogadaInvalidaException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean isJogadaValida(int[] posInicial, int[] posFinal) {
+        return (Math.abs(posInicial[0]-posFinal[0]) == 2 && Math.abs(posInicial[1]-posFinal[1]) == 1) || 
+                                         (Math.abs(posInicial[1]-posFinal[1]) == 2 && Math.abs(posInicial[0]-posFinal[0]) == 1);
     }
     
 }

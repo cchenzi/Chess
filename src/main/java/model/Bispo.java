@@ -5,8 +5,6 @@
  */
 package model;
 
-import Exceptions.JogadaInvalidaException;
-
 /**
  *
  * @author felip
@@ -14,12 +12,12 @@ import Exceptions.JogadaInvalidaException;
 public class Bispo extends Peca {
 
     public Bispo() {
-        super(0);   // DEFINIR O VALOR CORRETO
+        super(3);  
     }
 
     @Override
-    public void movimentar(int[] posInicial, int[] posFinal) throws JogadaInvalidaException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean isJogadaValida(int[] posInicial, int[] posFinal) {
+        return Math.abs(posInicial[0] - posFinal[0]) == Math.abs(posInicial[1] - posFinal[1]);
     }
     
 }

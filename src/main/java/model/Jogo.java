@@ -5,33 +5,36 @@
  */
 package model;
 
+import Exceptions.JogadaInvalidaException;
+
 /**
  *
  * @author felip
  */
 public abstract class Jogo {
 
-    private Jogador[] jogadores;
-    
+    protected Jogador[] jogadores;
+    protected int jogadorVez;
+
     public Jogo(Jogador[] jogadores) {
         this.jogadores = jogadores;
     }
-    
+
     public Jogador[] getJogadores() {
         return jogadores;
     }
-    
-    // IMPLEMENTAR PADRÃO TEMPLATE METHOD
-    public void jogar() {
-        int i = 0;
-        while (!fimJogo()) {
-            realizarJogada(jogadores[i % jogadores.length]);
-            i++;
-        }
+
+    public int getJogadorVez() {
+        return jogadorVez;
     }
     
-    protected abstract void realizarJogada(Jogador jogador); 
-    
-    protected abstract boolean fimJogo();
-    
+    protected abstract void trocarJogadorVez();
+
+    // SUB-METODOS TEMPLATE METHOD  // OBS: Template Method esta no ActionListener dos buttons na GUI
+    public abstract void fazerJogada(int[] posInicial, int[] posDestino) throws JogadaInvalidaException;
+
+    public abstract boolean verificaFimJogo();
+
+    public abstract void preparaProximaJogada();
+
 }

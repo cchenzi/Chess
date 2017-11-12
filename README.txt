@@ -17,6 +17,7 @@ PROJETO - JOGO DE XADREZ
 * PADRÕES DE PROJETO
   1) TEMPLATE METHOD
     - JOGO: carrega o fluxo de programa de um jogo generico. (Ex.: jogaPlayer1, jogaPlayer2, verificaVencedor);
+    *OBS: o método se encontra no actionListener dos botões da GUI;
     
   2) PADRÃO ESTRATÉGIA
     - PEÇA: classe abstrata que carrega os atributos e a assinatura dos métodos das classes concretas de cada peça específica (Ex.: Bispo, Cavalo);

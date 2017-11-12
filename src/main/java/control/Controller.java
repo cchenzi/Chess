@@ -19,10 +19,8 @@ public class Controller {
     }
     
     public void iniciarNovoXadrez(Jogador[] jogadores) {   
-        jogo = new Xadrez(jogadores, null);
+        jogo = new Xadrez(jogadores);
         TelaJogo telaJogo = new TelaJogo(this);
-        ((Xadrez)jogo).setObserver(telaJogo);
-        jogo.jogar();
     }
     
 }

@@ -5,8 +5,6 @@
  */
 package model;
 
-import Exceptions.JogadaInvalidaException;
-
 /**
  *
  * @author felip
@@ -14,12 +12,14 @@ import Exceptions.JogadaInvalidaException;
 public class Peao extends Peca {
 
     public Peao() {
-        super(0);   // DEFINIR VALOR CORRETO
+        super(1);  
     }
 
     @Override
-    public void movimentar(int[] posInicial, int[] posFinal) throws JogadaInvalidaException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean isJogadaValida(int[] posInicial, int[] posFinal) {
+        // IMPLEMENTAR REGRA DE MORTE E SALTO DUPLO INICIAL
+        return Math.abs(posFinal[0]-posInicial[0]) == 1 && posFinal[1] == posInicial[1];
+        // IMPLEMENTAR PROMOCAO
     }
     
 }

@@ -5,8 +5,6 @@
  */
 package model;
 
-import Exceptions.JogadaInvalidaException;
-
 /**
  *
  * @author felip
@@ -14,12 +12,14 @@ import Exceptions.JogadaInvalidaException;
 public class Rei extends Peca {
 
     public Rei() {
-        super(0);   // DEFINIR O VALOR CORRETO
+        super(0);  
     }
 
     @Override
-    public void movimentar(int[] posInicial, int[] posFinal) throws JogadaInvalidaException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean isJogadaValida(int[] posInicial, int[] posFinal) {
+        return (posFinal[0] == posInicial[0] && Math.abs(posFinal[1] - posInicial[1]) == 1) || 
+               (posFinal[1] == posInicial[1] && Math.abs(posFinal[0] - posInicial[0]) == 1) || 
+               (Math.abs(posInicial[0] - posFinal[0]) == Math.abs(posInicial[1] - posFinal[1]) && Math.abs(posInicial[0] - posFinal[0])==1);
     }
     
 }
