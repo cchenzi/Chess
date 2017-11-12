@@ -16,7 +16,7 @@ public class Torre extends Peca {
     }
 
     @Override
-    public boolean isJogadaValida(int[] posInicial, int[] posFinal) {
+    public boolean isJogadaValida(Xadrez.PecasEnum[][] tabuleiro, int[] posInicial, int[] posFinal) {
         return posInicial[0] == posFinal[0] || posInicial[1] == posFinal[1];
     }
     

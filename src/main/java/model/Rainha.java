@@ -16,7 +16,7 @@ public class Rainha extends Peca {
     }
 
     @Override
-    public boolean isJogadaValida(int[] posInicial, int[] posFinal) {
+    public boolean isJogadaValida(Xadrez.PecasEnum[][] tabuleiro, int[] posInicial, int[] posFinal) {
         return posFinal[0] == posInicial[0] || posFinal[1] == posInicial[1] || Math.abs(posInicial[0] - posFinal[0]) == Math.abs(posInicial[1] - posFinal[1]);
     }
     

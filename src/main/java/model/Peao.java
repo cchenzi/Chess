@@ -5,6 +5,8 @@
  */
 package model;
 
+import model.Xadrez.PecasEnum;
+
 /**
  *
  * @author felip
@@ -16,15 +18,25 @@ public class Peao extends Peca {
     }
 
     @Override
-    public boolean isJogadaValida(int[] posInicial, int[] posFinal) {
-        // IMPLEMENTAR REGRA DE MORTE E SALTO DUPLO INICIAL
-        if(posInicial[0] == 1 || posInicial[0] == 6){
+    public boolean isJogadaValida(PecasEnum[][] tabuleiro, int[] posInicial, int[] posFinal) {
+        // REGRA DE MORTE
+        if (tabuleiro[posFinal[0]][posFinal[1]] != null) {
+            if (Math.abs(posFinal[1] - posInicial[1]) == 1 && Math.abs(posFinal[0] - posInicial[0]) == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        
+        // LOGICA DE SALTO DUPLO
+        if(posInicial[0] == 1 || posInicial[0] == 6){   
             if(Math.abs(posFinal[0]-posInicial[0])<=2){
                 return posFinal[1] == posInicial[1];
             }
         }
-        return Math.abs(posFinal[0]-posInicial[0]) == 1 && posFinal[1] == posInicial[1];
-        // IMPLEMENTAR PROMOCAO
+        
+        // LOGICA DE AVANCO SIMPLES 
+        return Math.abs(posFinal[0]-posInicial[0]) == 1 && posFinal[1] == posInicial[1];          
     }
     
 }

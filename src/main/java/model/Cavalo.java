@@ -16,7 +16,7 @@ public class Cavalo extends Peca {
     }
 
     @Override
-    public boolean isJogadaValida(int[] posInicial, int[] posFinal) {
+    public boolean isJogadaValida(Xadrez.PecasEnum[][] tabuleiro, int[] posInicial, int[] posFinal) {
         return (Math.abs(posInicial[0]-posFinal[0]) == 2 && Math.abs(posInicial[1]-posFinal[1]) == 1) || 
                                          (Math.abs(posInicial[1]-posFinal[1]) == 2 && Math.abs(posInicial[0]-posFinal[0]) == 1);
     }

@@ -5,6 +5,8 @@
  */
 package model;
 
+import model.Xadrez.PecasEnum;
+
 /**
  *
  * @author felip
@@ -22,6 +24,6 @@ public abstract class Peca {
         return valor;
     }
 
-    public abstract boolean isJogadaValida(int[] posInicial, int[] posFinal);
+    public abstract boolean isJogadaValida(PecasEnum[][] tabuleiro, int[] posInicial, int[] posFinal);
 
 }
