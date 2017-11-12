@@ -145,6 +145,14 @@ public class TelaJogo extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         jPanelLateral.add(jButton1, gridBagConstraints);
+        jButton1.addActionListener((ActionEvent e) -> {
+            int valorRenuncia = Integer.parseInt(JOptionPane.showInputDialog(null, controller.getJogo().getJogadores()[controller.getJogo().getJogadorVez()].getNome()+", voce tem certeza disso? [0]Nao [1]Sim" ));
+            if(valorRenuncia ==1){
+              controller.getJogo().preparaProximaJogada();
+              anunciarVencedor();              
+            }
+        
+        });
 
         JButton jButton2 = new JButton("Empate");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -153,6 +161,13 @@ public class TelaJogo extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         jPanelLateral.add(jButton2, gridBagConstraints);
+        jButton2.addActionListener((ActionEvent e) -> {
+            int valorEmpate = Integer.parseInt(JOptionPane.showInputDialog(null, "Ambos os jogadores concordam com o empate? [0]Nao [1]Sim" ));
+            if(valorEmpate ==1){
+                anunciarEmpate();
+            }        
+        });
+        
     }
 
     private void criarJPanelMatrizBotoes() {
@@ -215,6 +230,7 @@ public class TelaJogo extends javax.swing.JFrame {
                     destinoPecaSelecionada = (JToggleButton) e.getSource();
                     try {
                         controller.getJogo().fazerJogada(getButtonPosition(pecaSelecionada), getButtonPosition(destinoPecaSelecionada));
+                       
                         if (controller.getJogo().verificaFimJogo()) {
                             anunciarVencedor();
                         } else {
@@ -244,6 +260,10 @@ public class TelaJogo extends javax.swing.JFrame {
     private void anunciarVencedor() {
         JOptionPane.showMessageDialog(null, "XEQUE-MATE!!");
         JOptionPane.showMessageDialog(null, "PARABÉNS " + controller.getJogo().getJogadores()[controller.getJogo().getJogadorVez()].getNome());
+        fecharTela();
+    }
+    private void anunciarEmpate(){
+        JOptionPane.showMessageDialog(null, "Foi declarado empate!");
         fecharTela();
     }
 
