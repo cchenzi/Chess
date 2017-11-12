@@ -94,18 +94,19 @@ public class Xadrez extends Jogo {
     @Override
     public void fazerJogada(int[] posInicial, int[] posDestino) throws JogadaInvalidaException {
         Peca peca = mapaPecaId.get(tabuleiro[posInicial[0]][posInicial[1]].toString().split("_")[0]);
-        /* POSSIVEL TESTE PRA PROMOÇÃO
-        if(peca.getValor()==1){
-            if(posDestino[0] == 0 || posDestino[0] == 7){
-                System.out.println("testefeito");
-            }
-            
-        }*/
+      
  
         if(peca.getValor()==1 && tabuleiro[posDestino[0]][posDestino[1]] != null){
             if(posDestino[1] == posInicial[1]+1 || posDestino[1] == posInicial[1]-1){
             tabuleiro[posDestino[0]][posDestino[1]] = tabuleiro[posInicial[0]][posInicial[1]];
-            tabuleiro[posInicial[0]][posInicial[1]] = null;  
+            tabuleiro[posInicial[0]][posInicial[1]] = null; 
+                //TESTE PARA PROMOÇÃO
+                if(peca.getValor()==1){
+                     if(posDestino[0] == 0 || posDestino[0] == 7){
+                     //FAZER UM TESTE DECENTE PARA VER SE É BRANCO OU PRETO, PENSAR SE IMPLEMENTA ESCOLHA OU SÓ RAINHA
+                     tabuleiro[posDestino[0]][posDestino[1]] = PecasEnum.RAINHA_BRANCO; 
+            }
+        }
             }
         }
         else if (peca.isJogadaValida(posInicial, posDestino)) {
