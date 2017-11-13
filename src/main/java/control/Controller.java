@@ -20,7 +20,7 @@ public class Controller {
     
     public void iniciarNovoXadrez(Jogador[] jogadores) {   
         jogo = new Xadrez(jogadores);
-        TelaJogo telaJogo = new TelaJogo(this);
+        TelaJogo telaJogo = new TelaJogo(this);   
     }
     
 }

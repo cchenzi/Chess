@@ -11,12 +11,12 @@ package model;
  */
 public class Torre extends Peca {
 
-    public Torre() {
-        super(5);   
+    public Torre(String cor) {
+        super(5, cor);   
     }
 
     @Override
-    public boolean isJogadaValida(Xadrez.PecasEnum[][] tabuleiro, int[] posInicial, int[] posFinal) {
+    public boolean isJogadaValida(Peca[][] tabuleiro, int[] posInicial, int[] posFinal) {
         return posInicial[0] == posFinal[0] || posInicial[1] == posFinal[1];
     }
     

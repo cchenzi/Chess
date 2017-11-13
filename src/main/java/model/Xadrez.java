@@ -6,8 +6,6 @@
 package model;
 
 import Exceptions.JogadaInvalidaException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -15,32 +13,15 @@ import java.util.Map;
  */
 public class Xadrez extends Jogo {
 
-    private Map<String, Peca> mapaPecaId = new HashMap<>();
-    private PecasEnum[][] tabuleiro;
-
-    public enum PecasEnum {
-
-        PEAO_PRETO, PEAO_BRANCO, BISPO_PRETO, BISPO_BRANCO, CAVALO_PRETO, CAVALO_BRANCO, RAINHA_PRETO, RAINHA_BRANCO, REI_PRETO,
-        REI_BRANCO, TORRE_PRETO, TORRE_BRANCO;
-    }
-
-    private void inicializarMapaPecaId() {
-        mapaPecaId.put("PEAO", new Peao());
-        mapaPecaId.put("TORRE", new Torre());
-        mapaPecaId.put("CAVALO", new Cavalo());
-        mapaPecaId.put("BISPO", new Bispo());
-        mapaPecaId.put("RAINHA", new Rainha());
-        mapaPecaId.put("REI", new Rei());
-    }
+    private Peca[][] tabuleiro;
 
     public Xadrez(Jogador[] jogadores) {
         super(jogadores);
-        inicializarMapaPecaId();
         inicializarTabuleiro();
         jogadorVez = 0;
     }
 
-    public PecasEnum[][] getTabuleiro() {
+    public Peca[][] getTabuleiro() {
         return tabuleiro;
     }
 
@@ -54,38 +35,38 @@ public class Xadrez extends Jogo {
     }
 
     private void inicializarTabuleiro() {
-        tabuleiro = new PecasEnum[8][8];
+        tabuleiro = new Peca[8][8];
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 8; j++) {
                 if (i == 0) {
                     switch (j) {
                         case 0:
                         case 7:
-                            tabuleiro[i][j] = PecasEnum.TORRE_PRETO;
-                            tabuleiro[i + 7][j] = PecasEnum.TORRE_BRANCO;
+                            tabuleiro[i][j] = new Torre("PRETO");
+                            tabuleiro[i + 7][j] = new Torre("BRANCO");
                             break;
                         case 1:
                         case 6:
-                            tabuleiro[i][j] = PecasEnum.CAVALO_PRETO;
-                            tabuleiro[i + 7][j] = PecasEnum.CAVALO_BRANCO;
+                            tabuleiro[i][j] = new Cavalo("PRETO");
+                            tabuleiro[i + 7][j] = new Cavalo("BRANCO");
                             break;
                         case 2:
                         case 5:
-                            tabuleiro[i][j] = PecasEnum.BISPO_PRETO;
-                            tabuleiro[i + 7][j] = PecasEnum.BISPO_BRANCO;
+                            tabuleiro[i][j] = new Bispo("PRETO");
+                            tabuleiro[i + 7][j] = new Bispo("BRANCO");
                             break;
                         case 3:
-                            tabuleiro[i][j] = PecasEnum.RAINHA_PRETO;
-                            tabuleiro[i + 7][j] = PecasEnum.RAINHA_BRANCO;
+                            tabuleiro[i][j] = new Rainha("PRETO");
+                            tabuleiro[i + 7][j] = new Rainha("BRANCO");
                             break;
                         default: // CASE 4
-                            tabuleiro[i][j] = PecasEnum.REI_PRETO;
-                            tabuleiro[i + 7][j] = PecasEnum.REI_BRANCO;
+                            tabuleiro[i][j] = new Rei("PRETO");
+                            tabuleiro[i + 7][j] = new Rei("BRANCO");
                             break;
                     }
                 } else {
-                    tabuleiro[i][j] = PecasEnum.PEAO_PRETO;
-                    tabuleiro[i + 5][j] = PecasEnum.PEAO_BRANCO;
+                    tabuleiro[i][j] = new Peao("PRETO");
+                    tabuleiro[i + 5][j] = new Peao("BRANCO");
                 }
             }
         }
@@ -93,26 +74,25 @@ public class Xadrez extends Jogo {
 
     @Override
     public void fazerJogada(int[] posInicial, int[] posDestino) throws JogadaInvalidaException {
-        Peca peca = mapaPecaId.get(tabuleiro[posInicial[0]][posInicial[1]].toString().split("_")[0]);
-        if (peca.isJogadaValida(tabuleiro, posInicial, posDestino)) {
-            // TESTE DE MORTE E ATUALIZACAO DA PONTUACAO CASO VERDADEIRO
+        Peca peca = tabuleiro[posInicial[0]][posInicial[1]];
+        if (peca.isJogadaValida(tabuleiro, posInicial, posDestino) && (!aconteceSalto(posInicial, posDestino) || peca instanceof Cavalo) && (tabuleiro[posDestino[0]][posDestino[1]] == null || !tabuleiro[posDestino[0]][posDestino[1]].getCor().equals(peca.getCor()))) {
+            // TESTE DE MORTE E ATUALIZACAO DA PONTUACAO CASO VERDADEIRO  
             if (tabuleiro[posDestino[0]][posDestino[1]] != null) {
-                Peca pecaAux = mapaPecaId.get(tabuleiro[posDestino[0]][posDestino[1]].toString().split("_")[0]);
+                Peca pecaAux = tabuleiro[posDestino[0]][posDestino[1]];
                 jogadores[jogadorVez].setPontuacao(jogadores[jogadorVez].getPontuacao() + pecaAux.getValor());
             }
-            
-            //TESTE PARA PROMOÇÃO DE PEAO   // * PERMITIR A ESCOLHA DA PECA QUE SE DESEJA PROMOVER
+
+            //TESTE PARA PROMOÇÃO DE PEAO   
             if (peca instanceof Peao && (posDestino[0] == 0 || posDestino[0] == 7)) {
-                if (tabuleiro[posInicial[0]][posInicial[1]].toString().split("_")[1].equals("BRANCO")) {
-                    tabuleiro[posDestino[0]][posDestino[1]] = PecasEnum.RAINHA_BRANCO;
+                if (peca.getCor().equals("BRANCO")) {
+                    tabuleiro[posDestino[0]][posDestino[1]] = new Rainha("BRANCO");
                 } else {
-                    tabuleiro[posDestino[0]][posDestino[1]] = PecasEnum.RAINHA_PRETO;
+                    tabuleiro[posDestino[0]][posDestino[1]] = new Rainha("PRETO");
                 }
             } else {
                 // ATUALIZACAO REGULAR DO TABULEIRO
-                tabuleiro[posDestino[0]][posDestino[1]] = tabuleiro[posInicial[0]][posInicial[1]];         
+                tabuleiro[posDestino[0]][posDestino[1]] = tabuleiro[posInicial[0]][posInicial[1]];
             }
-    
             tabuleiro[posInicial[0]][posInicial[1]] = null;
         } else {
             throw new JogadaInvalidaException();
@@ -121,16 +101,16 @@ public class Xadrez extends Jogo {
 
     @Override
     public boolean verificaFimJogo() {
-        PecasEnum reiAlvo;
+        String corAdversario;
         if (jogadorVez == 0) {
-            reiAlvo = PecasEnum.REI_PRETO;
+            corAdversario = "PRETO";
         } else {
-            reiAlvo = PecasEnum.REI_BRANCO;
+            corAdversario = "BRANCO";
         }
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (tabuleiro[i][j] == reiAlvo) {
+                if (tabuleiro[i][j] instanceof Rei && tabuleiro[i][j].getCor().equals(corAdversario)) {
                     return false;
                 }
             }
@@ -141,6 +121,60 @@ public class Xadrez extends Jogo {
     @Override
     public void preparaProximaJogada() {
         trocarJogadorVez();
+    }
+
+    public boolean aconteceSalto(int[] posInicial, int[] posFinal) {
+        int diffLinhas = posFinal[0] - posInicial[0];
+        int diffColunas = posFinal[1] - posInicial[1];
+
+        if (Math.abs(diffLinhas) > 1) {
+            if (Math.abs(diffColunas) > 1) {
+                if (diffLinhas != diffColunas) {
+                    // DIAGONAL INVERTIDA
+                    int i = Math.min(posInicial[0], posInicial[1]) + 1;
+                    int j = Math.max(posFinal[0], posFinal[1]) - 1;
+                    while (i < Math.max(posInicial[0], posInicial[1]) - 1) {
+                        if (tabuleiro[i][j] != null) {
+                            return true;
+                        }
+                        i++;
+                        j--;
+                    }
+                } else {
+                    // DIAGONAL
+                    int i = Math.min(posInicial[0], posInicial[1]) + 1;
+                    int j = Math.min(posFinal[0], posFinal[1]) + 1;
+                    while (i < Math.max(posInicial[0], posInicial[1]) - 1) {
+                        if (tabuleiro[i][j] != null) {
+                            return true;
+                        }
+                        i++;
+                        j++;
+                    }
+                }
+            } else {
+                // VERTICAL
+                int i = Math.min(posInicial[0], posFinal[0]) + 1;
+                int j = posFinal[1];
+                while (i < Math.max(posInicial[0], posFinal[0]) - 1) {
+                    if (tabuleiro[i][j] != null) {
+                        return true;
+                    }
+                    i++;
+                }
+            }
+        } else {
+            // HORIZONTAL
+            int i = posFinal[0];
+            int j = Math.min(posInicial[1], posFinal[1]) + 1;
+            while (j < Math.max(posInicial[1], posFinal[1]) - 1) {
+                if (tabuleiro[i][j] != null) {
+                    return true;
+                }
+                j++;
+            }
+        }
+        return false;
     }
 
 }

@@ -11,12 +11,12 @@ package model;
  */
 public class Bispo extends Peca {
 
-    public Bispo() {
-        super(3);  
+    public Bispo(String cor) {
+        super(3, cor);  
     }
 
     @Override
-    public boolean isJogadaValida(Xadrez.PecasEnum[][] tabuleiro, int[] posInicial, int[] posFinal) {
+    public boolean isJogadaValida(Peca[][] tabuleiro, int[] posInicial, int[] posFinal) {
         return Math.abs(posInicial[0] - posFinal[0]) == Math.abs(posInicial[1] - posFinal[1]);
     }
     

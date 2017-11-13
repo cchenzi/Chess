@@ -26,8 +26,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JToggleButton;
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
+import model.Peca;
 import model.Xadrez;
-import model.Xadrez.PecasEnum;
 
 /**
  *
@@ -146,12 +146,11 @@ public class TelaJogo extends javax.swing.JFrame {
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         jPanelLateral.add(jButton1, gridBagConstraints);
         jButton1.addActionListener((ActionEvent e) -> {
-            int valorRenuncia = Integer.parseInt(JOptionPane.showInputDialog(null, controller.getJogo().getJogadores()[controller.getJogo().getJogadorVez()].getNome()+", voce tem certeza disso? [0]Nao [1]Sim" ));
-            if(valorRenuncia ==1){
-              controller.getJogo().preparaProximaJogada();
-              anunciarVencedor();              
+            int valorRenuncia = JOptionPane.showConfirmDialog(null, controller.getJogo().getJogadores()[controller.getJogo().getJogadorVez()].getNome() + ", voce tem certeza disso?");
+            if (valorRenuncia == 0) {
+                controller.getJogo().preparaProximaJogada();
+                anunciarVencedor();
             }
-        
         });
 
         JButton jButton2 = new JButton("Empate");
@@ -162,12 +161,12 @@ public class TelaJogo extends javax.swing.JFrame {
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         jPanelLateral.add(jButton2, gridBagConstraints);
         jButton2.addActionListener((ActionEvent e) -> {
-            int valorEmpate = Integer.parseInt(JOptionPane.showInputDialog(null, "Ambos os jogadores concordam com o empate? [0]Nao [1]Sim" ));
-            if(valorEmpate ==1){
+            int valorEmpate = JOptionPane.showConfirmDialog(null, "Ambos os jogadores concordam com o empate?");
+            if (valorEmpate == 0) {
                 anunciarEmpate();
-            }        
+            }
         });
-        
+
     }
 
     private void criarJPanelMatrizBotoes() {
@@ -175,6 +174,7 @@ public class TelaJogo extends javax.swing.JFrame {
         jPanelMatrizBotoes.setBorder(new EmptyBorder(20, 20, 20, 20));
         criarMatrizBotoes();
         atualizarMatrizBotoes();
+        habilitarPecasDisponiveis();
     }
 
     private void criarMatrizBotoes() {
@@ -194,12 +194,12 @@ public class TelaJogo extends javax.swing.JFrame {
     }
 
     private void atualizarMatrizBotoes() {
-        PecasEnum[][] matriz = ((Xadrez) controller.getJogo()).getTabuleiro();
+        Peca[][] matriz = ((Xadrez) controller.getJogo()).getTabuleiro();
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (matriz[i][j] != null) {
-                    String nomeArquivo = matriz[i][j].toString().toLowerCase() + ".png";
-                    matrizBotoes[i][j].setIcon(new ImageIcon(System.getProperty("user.dir") + "/src/main/java/img/" + nomeArquivo));  // FAZER DINAMICAMENTE
+                    String nomeArquivo = matriz[i][j].getClass().getName().replace(".", "_").split("_")[1] + "_" + matriz[i][j].getCor() + ".png";
+                    matrizBotoes[i][j].setIcon(new ImageIcon(System.getProperty("user.dir") + "/src/main/java/img/" + nomeArquivo.toLowerCase()));
                 } else {
                     matrizBotoes[i][j].setIcon(null);
                 }
@@ -230,42 +230,38 @@ public class TelaJogo extends javax.swing.JFrame {
                     destinoPecaSelecionada = (JToggleButton) e.getSource();
                     try {
                         controller.getJogo().fazerJogada(getButtonPosition(pecaSelecionada), getButtonPosition(destinoPecaSelecionada));
-                       
                         if (controller.getJogo().verificaFimJogo()) {
                             anunciarVencedor();
                         } else {
-                            limparSelecao();
                             controller.getJogo().preparaProximaJogada();
                             atualizarMatrizBotoes();
                             atualizarLabels();
-                            habilitarPecasDisponiveis();
                         }
                     } catch (JogadaInvalidaException ex) {
                         JOptionPane.showMessageDialog(null, "Jogada inválida!");
+                    } finally {
                         limparSelecao();
+                        habilitarPecasDisponiveis();
                     }
                 }
             }
         });
-
         return button;
     }
 
     private void atualizarLabels() {
-      
         jogadorVez.setText("Vez de: " + controller.getJogo().getJogadores()[controller.getJogo().getJogadorVez()].getNome());
         pontuacaoP1.setText("" + controller.getJogo().getJogadores()[0].getPontuacao());
         pontuacaoP2.setText("" + controller.getJogo().getJogadores()[1].getPontuacao());
     }
-    
-    
 
     private void anunciarVencedor() {
         JOptionPane.showMessageDialog(null, "XEQUE-MATE!!");
         JOptionPane.showMessageDialog(null, "PARABÉNS " + controller.getJogo().getJogadores()[controller.getJogo().getJogadorVez()].getNome());
         fecharTela();
     }
-    private void anunciarEmpate(){
+
+    private void anunciarEmpate() {
         JOptionPane.showMessageDialog(null, "Foi declarado empate!");
         fecharTela();
     }
@@ -281,12 +277,6 @@ public class TelaJogo extends javax.swing.JFrame {
         int i = getButtonPosition(button)[0];
         int j = getButtonPosition(button)[1];
         return ((Xadrez) controller.getJogo()).getTabuleiro()[i][j] != null;
-    }
-
-    private String getCorPeca(JToggleButton button) {
-        int i = getButtonPosition(button)[0];
-        int j = getButtonPosition(button)[1];
-        return ((Xadrez) controller.getJogo()).getTabuleiro()[i][j].toString().split("_")[1];
     }
 
     private void habilitarPecasDisponiveis() {
@@ -315,6 +305,12 @@ public class TelaJogo extends javax.swing.JFrame {
                 matrizBotoes[i][j].setEnabled(true);
             }
         }
+    }
+    
+    private String getCorPeca(JToggleButton button) {
+        int i = getButtonPosition(button)[0];
+        int j = getButtonPosition(button)[1];
+        return ((Xadrez)controller.getJogo()).getTabuleiro()[i][j].getCor();
     }
 
 }

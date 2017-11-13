@@ -5,38 +5,40 @@
  */
 package model;
 
-import model.Xadrez.PecasEnum;
-
 /**
  *
  * @author felip
  */
 public class Peao extends Peca {
 
-    public Peao() {
-        super(1);  
+    public Peao(String cor) {
+        super(1, cor);
     }
 
     @Override
-    public boolean isJogadaValida(PecasEnum[][] tabuleiro, int[] posInicial, int[] posFinal) {
-        // REGRA DE MORTE
-        if (tabuleiro[posFinal[0]][posFinal[1]] != null) {
-            if (Math.abs(posFinal[1] - posInicial[1]) == 1 && Math.abs(posFinal[0] - posInicial[0]) == 1) {
-                return true;
+    public boolean isJogadaValida(Peca[][] tabuleiro, int[] posInicial, int[] posFinal) {
+        String cor = tabuleiro[posInicial[0]][posInicial[1]].getCor();
+
+        if (tabuleiro[posFinal[0]][posFinal[1]] == null) {
+            if (Math.abs(posFinal[0] - posInicial[0]) <= 2 && posFinal[1] == posInicial[1]) {
+                if (cor.equals("BRANCO")) {
+                    return posInicial[0] == 6 || (posFinal[0] - posInicial[0] == -1);
+                } else {
+                    return posInicial[0] == 1 || (posFinal[0] - posInicial[0] == 1);
+                }
+            } else {
+                return false;
+            }
+        } else {
+            if (Math.abs(posFinal[1] - posInicial[1]) == 1) {
+                if (cor.equals("BRANCO")) {
+                    return posFinal[0] - posInicial[0] == -1;
+                } else {
+                    return posFinal[0] - posInicial[0] == 1;
+                }
             } else {
                 return false;
             }
         }
-        
-        // LOGICA DE SALTO DUPLO
-        if(posInicial[0] == 1 || posInicial[0] == 6){   
-            if(Math.abs(posFinal[0]-posInicial[0])<=2){
-                return posFinal[1] == posInicial[1];
-            }
-        }
-        
-        // LOGICA DE AVANCO SIMPLES 
-        return Math.abs(posFinal[0]-posInicial[0]) == 1 && posFinal[1] == posInicial[1];          
     }
-    
 }

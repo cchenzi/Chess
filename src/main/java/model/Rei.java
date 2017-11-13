@@ -11,15 +11,15 @@ package model;
  */
 public class Rei extends Peca {
 
-    public Rei() {
-        super(0);  
+    public Rei(String cor) {
+        super(0, cor);  
     }
 
     @Override
-    public boolean isJogadaValida(Xadrez.PecasEnum[][] tabuleiro, int[] posInicial, int[] posFinal) {
+    public boolean isJogadaValida(Peca[][] tabuleiro, int[] posInicial, int[] posFinal) {
         return (posFinal[0] == posInicial[0] && Math.abs(posFinal[1] - posInicial[1]) == 1) || 
                (posFinal[1] == posInicial[1] && Math.abs(posFinal[0] - posInicial[0]) == 1) || 
-               (Math.abs(posInicial[0] - posFinal[0]) == Math.abs(posInicial[1] - posFinal[1]) && Math.abs(posInicial[0] - posFinal[0])==1);
+               (Math.abs(posInicial[0] - posFinal[0]) == Math.abs(posInicial[1] - posFinal[1]) && Math.abs(posInicial[0] - posFinal[0]) == 1);
     }
     
 }

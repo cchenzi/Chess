@@ -5,8 +5,6 @@
  */
 package model;
 
-import model.Xadrez.PecasEnum;
-
 /**
  *
  * @author felip
@@ -14,16 +12,22 @@ import model.Xadrez.PecasEnum;
 public abstract class Peca {
 
     private int valor;
+    private String cor;
 
-    public Peca(int valor) {
+    public Peca(int valor, String cor) {
         super();
         this.valor = valor;
+        this.cor = cor;
     }
     
     public int getValor() {
         return valor;
     }
+    
+    public String getCor() {
+        return cor;
+    }
 
-    public abstract boolean isJogadaValida(PecasEnum[][] tabuleiro, int[] posInicial, int[] posFinal);
+    public abstract boolean isJogadaValida(Peca[][] tabuleiro, int[] posInicial, int[] posFinal);
 
 }
