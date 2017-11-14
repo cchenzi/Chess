@@ -22,9 +22,9 @@ public class Peao extends Peca {
         if (tabuleiro[posFinal[0]][posFinal[1]] == null) {
             if (Math.abs(posFinal[0] - posInicial[0]) <= 2 && posFinal[1] == posInicial[1]) {
                 if (cor.equals("BRANCO")) {
-                    return posInicial[0] == 6 || (posFinal[0] - posInicial[0] == -1);
+                    return (posInicial[0] == 6 && posFinal[0] != 7) || (posFinal[0] - posInicial[0] == -1);
                 } else {
-                    return posInicial[0] == 1 || (posFinal[0] - posInicial[0] == 1);
+                    return (posInicial[0] == 1 && posFinal[0] != 0) || (posFinal[0] - posInicial[0] == 1);
                 }
             } else {
                 return false;

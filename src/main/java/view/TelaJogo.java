@@ -218,33 +218,7 @@ public class TelaJogo extends javax.swing.JFrame {
             button.setBackground(new Color(205, 133, 63));  // COR = MARROM
         }
         button.addActionListener((ActionEvent e) -> {
-            // TEMPLATE METHOD
-            if (pecaSelecionada == null) {
-                pecaSelecionada = (JToggleButton) e.getSource();
-                habilitarTodosBotoes();
-            } else {
-                if (e.getSource() == pecaSelecionada) {
-                    pecaSelecionada.setSelected(true);
-                    JOptionPane.showMessageDialog(null, "Uma vez selecionada, esta peça tem de ser jogada!");
-                } else {
-                    destinoPecaSelecionada = (JToggleButton) e.getSource();
-                    try {
-                        controller.getJogo().fazerJogada(getButtonPosition(pecaSelecionada), getButtonPosition(destinoPecaSelecionada));
-                        if (controller.getJogo().verificaFimJogo()) {
-                            anunciarVencedor();
-                        } else {
-                            controller.getJogo().preparaProximaJogada();
-                            atualizarMatrizBotoes();
-                            atualizarLabels();
-                        }
-                    } catch (JogadaInvalidaException ex) {
-                        JOptionPane.showMessageDialog(null, "Jogada inválida!");
-                    } finally {
-                        limparSelecao();
-                        habilitarPecasDisponiveis();
-                    }
-                }
-            }
+            definirToggleButtonActionListener((JToggleButton) e.getSource());
         });
         return button;
     }
@@ -306,11 +280,47 @@ public class TelaJogo extends javax.swing.JFrame {
             }
         }
     }
-    
+
     private String getCorPeca(JToggleButton button) {
         int i = getButtonPosition(button)[0];
         int j = getButtonPosition(button)[1];
-        return ((Xadrez)controller.getJogo()).getTabuleiro()[i][j].getCor();
+        return ((Xadrez) controller.getJogo()).getTabuleiro()[i][j].getCor();
+    }
+
+    private void definirToggleButtonActionListener(JToggleButton button) {
+        // TEMPLATE METHOD
+        if (pecaSelecionada == null) {
+            pecaSelecionada = button;
+            habilitarTodosBotoes();
+        } else {
+            if (button == pecaSelecionada) {
+                pecaSelecionada.setSelected(true);
+                JOptionPane.showMessageDialog(null, "Uma vez selecionada, esta peça tem de ser jogada!");
+            } else {
+                destinoPecaSelecionada = button;
+                try {
+                    fazerJogada();
+                } catch (JogadaInvalidaException ex) {
+                    JOptionPane.showMessageDialog(null, "Jogada inválida!");
+                } finally {
+                    limparSelecao();
+                    habilitarPecasDisponiveis();
+                }
+            }
+        }
+    }
+
+    private void fazerJogada() throws JogadaInvalidaException {
+        controller.getJogo().fazerJogada(getButtonPosition(pecaSelecionada), getButtonPosition(destinoPecaSelecionada));
+
+        if (controller.getJogo().verificaFimJogo()) {
+            anunciarVencedor();
+        } else {
+            // PREPARA PROXIMA RODADA
+            controller.getJogo().preparaProximaJogada();
+            atualizarMatrizBotoes();
+            atualizarLabels();
+        }
     }
 
 }

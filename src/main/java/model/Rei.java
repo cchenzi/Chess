@@ -19,7 +19,8 @@ public class Rei extends Peca {
     public boolean isJogadaValida(Peca[][] tabuleiro, int[] posInicial, int[] posFinal) {
         return (posFinal[0] == posInicial[0] && Math.abs(posFinal[1] - posInicial[1]) == 1) || 
                (posFinal[1] == posInicial[1] && Math.abs(posFinal[0] - posInicial[0]) == 1) || 
-               (Math.abs(posInicial[0] - posFinal[0]) == Math.abs(posInicial[1] - posFinal[1]) && Math.abs(posInicial[0] - posFinal[0]) == 1);
+               (Math.abs(posInicial[0] - posFinal[0]) == Math.abs(posInicial[1] - posFinal[1]) && 
+                Math.abs(posInicial[0] - posFinal[0]) == 1);
     }
     
 }
