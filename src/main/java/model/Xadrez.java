@@ -75,7 +75,7 @@ public class Xadrez extends Jogo {
     @Override
     public void fazerJogada(int[] posInicial, int[] posDestino) throws JogadaInvalidaException {
         Peca peca = tabuleiro[posInicial[0]][posInicial[1]];
-        if (peca.isJogadaValida(tabuleiro, posInicial, posDestino) && (!aconteceSalto(posInicial, posDestino) || peca instanceof Cavalo) && (tabuleiro[posDestino[0]][posDestino[1]] == null || !tabuleiro[posDestino[0]][posDestino[1]].getCor().equals(peca.getCor()))) {
+        if (testaJogada(peca,posInicial,posDestino)) {
             // TESTE DE MORTE E ATUALIZACAO DA PONTUACAO CASO VERDADEIRO  
             if (tabuleiro[posDestino[0]][posDestino[1]] != null) {
                 Peca pecaAux = tabuleiro[posDestino[0]][posDestino[1]];
@@ -97,6 +97,13 @@ public class Xadrez extends Jogo {
         } else {
             throw new JogadaInvalidaException();
         }
+    }
+    
+    
+    public boolean testaJogada(Peca peca, int[] posInicial, int[] posDestino){
+        boolean jogadaValida = peca.isJogadaValida(tabuleiro, posInicial, posDestino);
+        boolean testaSalto = aconteceSalto(posInicial, posDestino);
+        return  jogadaValida && (!testaSalto || peca instanceof Cavalo) && (tabuleiro[posDestino[0]][posDestino[1]] == null || !tabuleiro[posDestino[0]][posDestino[1]].getCor().equals(peca.getCor()));
     }
 
     @Override
@@ -131,18 +138,48 @@ public class Xadrez extends Jogo {
             if (Math.abs(diffColunas) > 1) {
                 if (diffLinhas != diffColunas) {
                     // DIAGONAL INVERTIDA
-                    int i = Math.min(posInicial[0], posInicial[1]) + 1;
-                    int j = Math.max(posFinal[0], posFinal[1]) - 1;
-                    while (i < Math.max(posInicial[0], posInicial[1]) - 1) {
-                        if (tabuleiro[i][j] != null) {
-                            return true;
-                        }
-                        i++;
-                        j--;
-                    }
+                   return aconteceSaltoDiagonalInvertida(posInicial, posFinal);
+                  
                 } else {
                     // DIAGONAL
-                    int i = Math.min(posInicial[0], posInicial[1]) + 1;
+                    return aconteceSaltoDiagonal(posInicial, posFinal);
+                   
+                }
+            } else {
+                // VERTICAL
+               return aconteceSaltoVertical(posInicial, posFinal);
+            }
+        } else {
+            // HORIZONTAL
+            return aconteceSaltoHorizontal(posInicial, posFinal);
+           
+        }
+    }
+    
+    public boolean aconteceSaltoVertical(int[] posInicial, int[]posFinal){
+         int i = Math.min(posInicial[0], posFinal[0]) + 1;
+                int j = posFinal[1];
+                while (i < Math.max(posInicial[0], posFinal[0]) - 1) {
+                    if (tabuleiro[i][j] != null) {
+                        return true;
+                    }
+                    i++;
+                }
+        return false;
+    }
+     public boolean aconteceSaltoHorizontal(int[] posInicial, int[]posFinal){
+          int i = posFinal[0];
+            int j = Math.min(posInicial[1], posFinal[1]) + 1;
+            while (j < Math.max(posInicial[1], posFinal[1]) - 1) {
+                if (tabuleiro[i][j] != null) {
+                    return true;
+                }
+                j++;
+            }
+        return false;
+    }
+      public boolean aconteceSaltoDiagonal(int[] posInicial, int[]posFinal){
+           int i = Math.min(posInicial[0], posInicial[1]) + 1;
                     int j = Math.min(posFinal[0], posFinal[1]) + 1;
                     while (i < Math.max(posInicial[0], posInicial[1]) - 1) {
                         if (tabuleiro[i][j] != null) {
@@ -151,30 +188,22 @@ public class Xadrez extends Jogo {
                         i++;
                         j++;
                     }
-                }
-            } else {
-                // VERTICAL
-                int i = Math.min(posInicial[0], posFinal[0]) + 1;
-                int j = posFinal[1];
-                while (i < Math.max(posInicial[0], posFinal[0]) - 1) {
-                    if (tabuleiro[i][j] != null) {
-                        return true;
-                    }
-                    i++;
-                }
-            }
-        } else {
-            // HORIZONTAL
-            int i = posFinal[0];
-            int j = Math.min(posInicial[1], posFinal[1]) + 1;
-            while (j < Math.max(posInicial[1], posFinal[1]) - 1) {
-                if (tabuleiro[i][j] != null) {
-                    return true;
-                }
-                j++;
-            }
-        }
         return false;
     }
+       public boolean aconteceSaltoDiagonalInvertida(int[] posInicial, int[]posFinal){
+             int i = Math.min(posInicial[0], posInicial[1]) + 1;
+                    int j = Math.max(posFinal[0], posFinal[1]) - 1;
+                    while (i < Math.max(posInicial[0], posInicial[1]) - 1) {
+                        if (tabuleiro[i][j] != null) {
+                            return true;
+                        }
+                        i++;
+                        j--;
+                    }
+        return false;
+    }
+       
+      
+    
 
 }
